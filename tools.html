@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>جعبه‌ابزار سمباده | ابزارها و اپلیکیشن‌های اوپن‌سورس</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;800&family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1016;
+      --bg-soft: #181924;
+      --card: rgba(30, 32, 48, 0.72);
+      --text: #f3f4f8;
+      --text-muted: #a7aab8;
+      --accent: #8b5cf6;
+      --accent-2: #06b6d4;
+      --accent-glow: rgba(139, 92, 246, 0.35);
+      --border: rgba(255, 255, 255, 0.08);
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Vazirmatn', 'Tahoma', 'IranSans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.9;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.18), transparent 35%),
+        radial-gradient(circle at 85% 40%, rgba(6, 182, 212, 0.12), transparent 30%),
+        radial-gradient(circle at 50% 90%, rgba(139, 92, 246, 0.12), transparent 35%);
+      pointer-events: none;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    header {
+      position: relative;
+      width: 100%;
+      height: clamp(320px, 52vw, 680px);
+      overflow: hidden;
+      background: var(--bg-soft);
+    }
+
+    .banner {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(0.85) saturate(1.1);
+    }
+
+    .banner-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(15,16,22,0.08), var(--bg)),
+        linear-gradient(to top, rgba(15,16,22,0.72), transparent 58%);
+    }
+
+    .topbar {
+      position: absolute;
+      top: clamp(16px, 4vw, 34px);
+      left: 50%;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      width: min(1040px, calc(100% - 40px));
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: rgba(15, 16, 22, 0.34);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transform: translateX(-50%);
+      box-shadow: 0 18px 55px rgba(0,0,0,0.24);
+    }
+
+    .brand {
+      font-family: 'Space Grotesk', 'Vazirmatn', system-ui, sans-serif;
+      font-size: clamp(1.15rem, 2.4vw, 1.7rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      margin: 0;
+      direction: ltr;
+    }
+
+    .hero-content {
+      position: absolute;
+      left: 50%;
+      bottom: clamp(44px, 8vw, 110px);
+      z-index: 1;
+      width: min(920px, calc(100% - 40px));
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    .container {
+      max-width: 920px;
+      margin: -90px auto 60px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .home-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      text-decoration: none;
+      color: var(--text);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      font-size: 1.35rem;
+      transition: all 0.25s ease;
+      flex-shrink: 0;
+    }
+
+    .home-link:hover {
+      transform: translateY(-2px);
+      border-color: rgba(139, 92, 246, 0.5);
+      box-shadow: 0 10px 30px var(--accent-glow);
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1.35;
+      margin: 0 0 10px;
+      font-weight: 900;
+      background: linear-gradient(90deg, var(--text), var(--accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: clamp(1rem, 2vw, 1.18rem);
+      font-weight: 400;
+      margin: 0;
+    }
+
+    .card,
+    .tool-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 26px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .card:hover,
+    .tool-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 55px rgba(0,0,0,0.35);
+    }
+
+    h2 {
+      font-size: 1.45rem;
+      margin: 0 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text);
+    }
+
+    h2 .icon {
+      font-size: 1.6rem;
+    }
+
+    p {
+      margin: 0 0 18px;
+      color: var(--text-muted);
+      font-size: 1.08rem;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    .highlight {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .tool-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .tool-title {
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .tool-number {
+      min-width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      color: #fff;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 12px 34px rgba(139, 92, 246, 0.25);
+    }
+
+    .tool-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .meta-link,
+    .meta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: var(--text);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      font-size: 0.92rem;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .meta-link:hover {
+      transform: translateY(-2px);
+      border-color: rgba(6, 182, 212, 0.45);
+      background: rgba(6, 182, 212, 0.1);
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    footer .heart {
+      color: #ef4444;
+      display: inline-block;
+      animation: pulse 1.4s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    @media (max-width: 600px) {
+      header { height: clamp(260px, 64vw, 340px); }
+      .topbar {
+        top: 14px;
+        width: calc(100% - 28px);
+      }
+      .brand {
+        font-size: 1.1rem;
+      }
+      .hero-content {
+        bottom: 34px;
+        width: calc(100% - 28px);
+      }
+      .home-link {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+      }
+      h1 {
+        font-size: 1.75rem;
+        line-height: 1.45;
+      }
+      .subtitle {
+        font-size: 0.9rem;
+      }
+      .container {
+        margin: -58px auto 42px;
+        padding: 0 14px;
+      }
+      .card,
+      .tool-card {
+        padding: 22px;
+        border-radius: 18px;
+      }
+      .tool-head {
+        align-items: center;
+        gap: 12px;
+      }
+      .tool-meta {
+        gap: 8px;
+      }
+      .meta-link,
+      .meta-chip {
+        width: 100%;
+        border-radius: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+
+  <header>
+    <img src="media/images/tools_banner.jpg" alt="Sombade's Toolbox Banner" class="banner">
+    <div class="banner-overlay"></div>
+    <div class="topbar">
+      <h2 class="brand">Sombade's Toolbox</h2>
+      <a href="index.html" class="home-link" aria-label="برگشت به خونه سمباده">⌂</a>
+    </div>
+    <div class="hero-content">
+      <h1>جعبه‌ابزار سمباده؛ چیزایی که کارم رو راه می‌اندازن</h1>
+      <p class="subtitle">ابزارها و اپلیکیشن‌های رایگان و اوپن‌سورس که خودم ازشون استفاده می‌کنم.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2><span class="icon">🛠️</span> معرفی</h2>
+      <p><span class="highlight">سلام دوباره!</span></p>
+      <p>راستش من همیشه تو نخ پیدا کردن ابزارها و اپلیکیشن‌های باحال و کاربردی هستم؛ مخصوصاً اونایی که رایگان و اوپن‌سورس باشن . تو این صفحه لیستی از ابزارهایی رو جمع کردم که به مرور زمان پیداشون کردم، خودم ازشون استفاده می‌کنم و دیدم کار راه‌انداز و مفید هستن. امیدوارم به کار شما هم بیان و گرهی از کارتون باز کنن. لیست رو به مرور آپدیت می‌کنم!</p>
+    </section>
+
+    <section class="tools-grid" aria-label="لیست ابزارها و اپلیکیشن‌ها">
+      <article class="tool-card">
+        <div class="tool-head">
+          <h2 class="tool-title">Lively Wallpaper</h2>
+          <span class="tool-number">01</span>
+        </div>
+        <div class="tool-meta">
+          <a href="https://www.rocksdanister.com/lively/" target="_blank" rel="noopener" class="meta-link">🔗 دانلود</a>
+          <a href="https://github.com/rocksdanister/lively" target="_blank" rel="noopener" class="meta-link">🐙 گیتهاب</a>
+          <span class="meta-chip">📝 لایسنس: GPL-3.0</span>
+        </div>
+        <p>یه اپ خفن و اوپن‌سورس برای کسایی که دلشون بک‌گراند Live می‌خواد. برای ویندوزه و قابلیت پخش ویدیو یا حتی وب‌پیج‌های HTML رو داره. توی حالت وب‌پیج، یه سری اطلاعات مثل میزان مصرف سیستم (System Usage) یا اطلاعات مدیا رو هم نشون میده. خودم بالای دو سال و نیمه دارم ازش استفاده می‌کنم و یه بک‌گراند مشتی هم براش وایب کردم که جلوتر براتون می‌ذارم تا اگه خواستید حالش رو ببرید. هم رایگان، هم اوپن‌سورس.</p>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-head">
+          <h2 class="tool-title">TranslucentTB</h2>
+          <span class="tool-number">02</span>
+        </div>
+        <div class="tool-meta">
+          <a href="https://github.com/TranslucentTB/TranslucentTB/releases" target="_blank" rel="noopener" class="meta-link">🔗 دانلود</a>
+          <a href="https://github.com/TranslucentTB/TranslucentTB" target="_blank" rel="noopener" class="meta-link">🐙 گیتهاب</a>
+          <span class="meta-chip">📝 لایسنس: GPL-3.0</span>
+        </div>
+        <p>این یکی مخصوص انگولک کردن بک‌گراند تسک‌بار ویندوزه! می‌تونید کلاً شفافش کنید، حالت بلور (مات) بهش بدید یا تنظیمش کنید که وقتی یه برنامه تمام‌صفحه (Full Screen) می‌شه، رفتارش عوض بشه و ظاهر دسکتاپ رو شیک‌تر کنه. رایگان و اوپن‌سورس.</p>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-head">
+          <h2 class="tool-title">MPV</h2>
+          <span class="tool-number">03</span>
+        </div>
+        <div class="tool-meta">
+          <a href="https://mpv.io/installation/" target="_blank" rel="noopener" class="meta-link">🔗 دانلود</a>
+          <a href="https://github.com/mpv-player/mpv" target="_blank" rel="noopener" class="meta-link">🐙 گیتهاب</a>
+          <span class="meta-chip">📝 لایسنس: GPL-2.0</span>
+        </div>
+        <p>این پلیر واقعاً عشق منه! تا حالا به هیچ فرمت یا فایل سالمی برنخوردم که این نتونه پخشش کنه. دستت هم کاملاً بازه که براش اسکریپت بنویسی یا نصب کنی و شخصی‌سازی‌ش کنی. شاید ظاهر اولیه‌ش یکم قدیمی‌طور و مینیمال باشه، ولی با یه تم زدن حل می‌شه؛ هرچند من خودم همون قیافه‌ی زمخت و فابریک خودش رو بیشتر دوست دارم. رایگان و اوپن‌سورس.</p>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-head">
+          <h2 class="tool-title">WinDirStat</h2>
+          <span class="tool-number">04</span>
+        </div>
+        <div class="tool-meta">
+          <a href="https://windirstat.net/download.html" target="_blank" rel="noopener" class="meta-link">🔗 دانلود</a>
+          <a href="https://github.com/windirstat/windirstat" target="_blank" rel="noopener" class="meta-link">🐙 گیتهاب</a>
+          <span class="meta-chip">📝 لایسنس: GPL-2.0</span>
+        </div>
+        <p>اگه هاردتون پر شده و نمی‌دونید چی به چیه، این ابزار نجاتتونه. کل هارد رو اسکن می‌کنه و با یه محیط گرافیکی و تفکیک رنگ بهت نشون میده کدوم فایل‌ها و چرت‌و‌پرت‌ها حجم هاردت رو بلعیدن تا بتونی راحت پاکشون کنی. رایگان و اوپن‌سورس.</p>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-head">
+          <h2 class="tool-title">WizTree</h2>
+          <span class="tool-number">05</span>
+        </div>
+        <div class="tool-meta">
+          <a href="https://www.diskanalyzer.com/download" target="_blank" rel="noopener" class="meta-link">🔗 دانلود</a>
+          <span class="meta-chip">❌ گیتهاب: نداره (بسته‌ی مبدأ)</span>
+          <span class="meta-chip">📝 لایسنس: Freeware برای استفاده شخصی</span>
+        </div>
+        <p>این ابزار هم دقیقاً کار همون WinDirStat قبلی رو می‌کنه، با این تفاوت که محیطش فرق داره و سرعت اسکنش به شدت بالاتره (فوری کل هارد رو می‌جوئه). تنها ایرادش اینه که برخلاف قبلی اوپن‌سورس نیست، ولی خب کاملاً رایگانه.</p>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-head">
+          <h2 class="tool-title">Everything</h2>
+          <span class="tool-number">06</span>
+        </div>
+        <div class="tool-meta">
+          <a href="https://www.voidtools.com/downloads/" target="_blank" rel="noopener" class="meta-link">🔗 دانلود</a>
+          <a href="https://github.com/voidtools" target="_blank" rel="noopener" class="meta-link">🐙 گیتهاب: فقط CLI tools</a>
+          <span class="meta-chip">📝 لایسنس: Freeware (باینری رایگانه ولی کد کاملش اوپن‌سورس نیست)</span>
+        </div>
+        <p>گل سرسبد این لیست و عشق واقعی من! اگه شما هم مثل من کل سیستم‌تون پر شده از «New Folder 1» تا «New Folder 256» و همیشه تو پیدا کردن فایل‌هاتون گم می‌شید، این برنامه فرشته‌ی نجاتتونه. میاد کل فایل‌های سیستم رو ایندکس می‌کنه و موقع سرچ، بدون هیچ معطلی و در لحظه جاشون رو بهت نشون میده. رایگان و تقریبا اوپن‌سورس.</p>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-head">
+          <h2 class="tool-title">OpenWRT</h2>
+          <span class="tool-number">07</span>
+        </div>
+        <div class="tool-meta">
+          <a href="https://openwrt.org/downloads" target="_blank" rel="noopener" class="meta-link">🔗 دانلود</a>
+          <a href="https://github.com/openwrt/openwrt" target="_blank" rel="noopener" class="meta-link">🐙 گیتهاب</a>
+          <span class="meta-chip">📝 لایسنس: GPL-2.0</span>
+        </div>
+        <p>این یکی فوق‌العاده‌ست؛ یه سیستم‌عامل روتر برپایه‌ی لینوکس که حتی می‌تونید روی یه کیس قدیمی و افتاده گوشه خانه هم بالا بیاریدش. کلی پکیج باحال روش نصب می‌شه؛ مثلاً با پکیج passwall می‌تونید به کانفیگ‌های v2ray و این مدل پروتکل‌ها وصلش کنید و بعد کافیه این روتر رو سرور اصلی DHCP شبکه بذارید (یا دستی Default Gateway دیوایس‌هاتون رو ست کنید روی این روتر) و تمام! حالا بدون این‌که خودتون و خانواده درگیر روشن کردن وی‌پی‌ان تک‌تک دستگاه‌ها و مصرف باتری بشید، کل خونه به اینترنت آزاد وصله. یا مثلاً هارد بهش وصل کنید و به عنوان NAS ازش استفاده کنید، یا با MiniDLNA یه سرور استریم مدیای شخصی راه بندازید. اوپن‌سورس و رایگان.</p>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-head">
+          <h2 class="tool-title">Flow Launcher</h2>
+          <span class="tool-number">08</span>
+        </div>
+        <div class="tool-meta">
+          <a href="https://www.flowlauncher.com/" target="_blank" rel="noopener" class="meta-link">🔗 دانلود</a>
+          <a href="https://github.com/Flow-Launcher/Flow.Launcher" target="_blank" rel="noopener" class="meta-link">🐙 گیتهاب</a>
+          <span class="meta-chip">📝 لایسنس: MIT</span>
+        </div>
+        <p>این ابزار یه لانچر همه‌فن‌حریف و شیک برای ویندوزه. کافیه یه میانبر بزنید تا باز بشه و بتونید خیلی سریع بین برنامه‌ها، فایل‌ها، سیستم و حتی وب سرچ کنید یا کامند ران کنید. کلی پلاگین کاربردی هم داره که کار رو سریع‌تر می‌کنه. رایگان و اوپن‌سورس.</p>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-head">
+          <h2 class="tool-title">Proxmox</h2>
+          <span class="tool-number">09</span>
+        </div>
+        <div class="tool-meta">
+          <a href="https://www.proxmox.com/en/downloads" target="_blank" rel="noopener" class="meta-link">🔗 دانلود</a>
+          <a href="http://git.proxmox.com" target="_blank" rel="noopener" class="meta-link">🐙 گیتهاب: نداره (از Git اختصاصی خودشون استفاده می‌کنن: git.proxmox.com)</a>
+          <span class="meta-chip">📝 لایسنس: AGPL-3.0</span>
+        </div>
+        <p>یه سیستم‌عامل محشر برای مدیریت و ساخت ماشین‌های مجازی (Hypervisor). اگه یه سیستم دارید که داره یه گوشه خاک می‌خوره، حتماً این رو روش نصب کنید. برای یادگیری و تست عالیه؛ بدون نگرانی از خراب شدن فایل‌های سیستم اصلی، با یه VNC راحت وصل می‌شید به ماشین‌های مجازیتون و باهاشون کار می‌کنید. رایگان و اوپن‌سورس.</p>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-head">
+          <h2 class="tool-title">OpenMediaVault</h2>
+          <span class="tool-number">10</span>
+        </div>
+        <div class="tool-meta">
+          <a href="https://www.openmediavault.org/?page_id=77" target="_blank" rel="noopener" class="meta-link">🔗 دانلود</a>
+          <a href="https://github.com/openmediavault/openmediavault" target="_blank" rel="noopener" class="meta-link">🐙 گیتهاب</a>
+          <span class="meta-chip">📝 لایسنس: GPL-3.0</span>
+        </div>
+        <p>این یکی هم یه سیستم‌عامل تخصصی برای راه انداختن جفت‌وجور کردن NAS (ذخیره‌سازی تحت شبکه) هست. تعریفش رو خیلی شنیدم و تازه خودم دارم ستاپش می‌کنم؛ واسه همین فعلاً توضیح زیادی براش ندارم تا خودم یه مدت باهاش ور بروم و تستش کنم. رایگان و اوپن‌سورس.</p>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-head">
+          <h2 class="tool-title">Metrolist</h2>
+          <span class="tool-number">11</span>
+        </div>
+        <div class="tool-meta">
+          <a href="https://metrolist.cc/" target="_blank" rel="noopener" class="meta-link">🔗 دانلود</a>
+          <a href="https://github.com/MetrolistGroup/Metrolist" target="_blank" rel="noopener" class="meta-link">🐙 گیتهاب</a>
+          <span class="meta-chip">📝 لایسنس: GPL-3.0</span>
+        </div>
+        <p>یه اپلیکیشن اندرویدی عالی برای کسایی که می‌خوان راحت‌تر از یوتیوب موزیک استفاده کنن. قابلیت لوکال کش داره که وقتی نت قطع می‌شه، باز هم به موزیک‌های اخیری که گوش دادید دسترسی دارید (راستش این ویژگی من رو تو یک ماه اول جنگ نجات داد!). به نظر من صد هیچ یوتیوب موزیک اصلی رو می‌زنه، چون محدودیت‌های رو مخ لاک‌اسکرین رو هم نداره. فقط پیشنهاد می‌کنم با یه ایمیل فرعی روش لاگین کنید؛ البته من ایمیل اصلی موزیکم نزدیک ۹ ماهه روشه و خداروشکر مشکلی پیش نیومده. کاملاً رایگان و اوپن‌سورس.</p>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-head">
+          <h2 class="tool-title">Hermes</h2>
+          <span class="tool-number">12</span>
+        </div>
+        <div class="tool-meta">
+          <a href="https://hermes-agent.nousresearch.com/" target="_blank" rel="noopener" class="meta-link">🔗 دانلود</a>
+          <a href="https://github.com/NousResearch/hermes-agent" target="_blank" rel="noopener" class="meta-link">🐙 گیتهاب</a>
+          <span class="meta-chip">📝 لایسنس: MIT</span>
+        </div>
+        <p>خب این یکی که اصلاً نیازی به تعریف نداره؛ کافیه یه سرچ تو توییتر یا یوتیوب بزنید تا ببینید چقدر ویدیو آموزشی و محتوا براش هست. یه ایجنت فوق‌العاده محبوب که خودم الان تو دو تا جای مختلف دارم ازش استفاده می‌کنم و کارش درسته. رایگان و اوپن‌سورس.</p>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-head">
+          <h2 class="tool-title">9router</h2>
+          <span class="tool-number">13</span>
+        </div>
+        <div class="tool-meta">
+          <a href="https://9router.com/" target="_blank" rel="noopener" class="meta-link">🔗 دانلود</a>
+          <a href="https://github.com/decolua/9router" target="_blank" rel="noopener" class="meta-link">🐙 گیتهاب</a>
+          <span class="meta-chip">📝 لایسنس: MIT</span>
+        </div>
+        <p>این ابزار هم که احتمالاً معرف حضورتون هست؛ یه پلتفرم عالی برای مدیریت و استفاده هم‌زمان از چندین API مختلف. کاملاً رایگان و اوپن‌سورس.</p>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-head">
+          <h2 class="tool-title">Ventoy</h2>
+          <span class="tool-number">14</span>
+        </div>
+        <div class="tool-meta">
+          <a href="https://ventoy.net/en/download.html" target="_blank" rel="noopener" class="meta-link">🔗 دانلود</a>
+          <a href="https://github.com/ventoy/Ventoy" target="_blank" rel="noopener" class="meta-link">🐙 گیتهاب</a>
+          <span class="meta-chip">📝 لایسنس: GPL-3.0</span>
+        </div>
+        <p>بهترین ابزار برای کسایی که مدام کارشون با نصب ویندوز، لینوکس یا بوت کردن فایل‌های ISO و Image هست. با Ventoy، شما فقط یک بار فلش رو فرمت می‌کنی و این برنامه رو روش نصب می‌کنی؛ بعدش فلش مثل یه فلش عادی کار می‌کنه و حتی می‌تونی توش فایل معمولی بریزی. هر وقت هم خواستی یه سیستم‌عامل بوت کنی، فقط فایل ISO رو کپی می‌کنی کف فلش، همین! موقع بوت، یه منو برات باز می‌شه که لیست تمام ISOها رو نشون میده تا انتخاب کنی. نیازی به دردسرهای Rufus و فرمت مداوم نیست. رایگان و اوپن‌سورس.</p>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-head">
+          <h2 class="tool-title">TheGreatAzizi/DOH</h2>
+          <span class="tool-number">15</span>
+        </div>
+        <div class="tool-meta">
+          <span class="meta-chip">🔗 دانلود: از سورس دیپلوی می‌شه (Cloudflare Worker)</span>
+          <a href="https://github.com/TheGreatAzizi/Secure-DNS-over-HTTPS-Cloudflare-Worker" target="_blank" rel="noopener" class="meta-link">🐙 گیتهاب</a>
+          <span class="meta-chip">📝 لایسنس: در ریپو مشخص نشده</span>
+        </div>
+        <p>این یه سرویس DoH (دی‌ان‌اس روی HTTPS) هست که پشت ورکر کلادفلر کار می‌کنه و آقای عزیزی زحمتش رو کشیده. من خودم واقعاً ازش راضیم؛ هم امنیت رو بالاتر می‌بره و هم تا حد خوبی به دور زدن فیلترینگ و تحریم‌های مسخره کمک می‌کنه.</p>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-head">
+          <h2 class="tool-title">7-Zip</h2>
+          <span class="tool-number">16</span>
+        </div>
+        <div class="tool-meta">
+          <a href="https://www.7-zip.org/download.html" target="_blank" rel="noopener" class="meta-link">🔗 دانلود</a>
+          <a href="https://github.com/ip7z/7zip" target="_blank" rel="noopener" class="meta-link">🐙 گیتهاب</a>
+          <span class="meta-chip">📝 لایسنس: LGPL-2.1</span>
+        </div>
+        <p>رفیق بی‌ادعا، قدیمی و دوست‌داشتنی من توی فشرده‌سازی فایل‌ها که کار کردن باهاش واقعاً لذت‌بخش و ساده‌ست. تنها نکته‌ش اینه که خروجی فرمت RAR نمیده (فقط اکسترکت می‌کنه)، واسه همین گاهی مجبور می‌شیم برای فرستادن فایل به بقیه، از همون WinRAR قدیمی استفاده کنیم. رایگان و اوپن‌سورس.</p>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-head">
+          <h2 class="tool-title">File Converter</h2>
+          <span class="tool-number">17</span>
+        </div>
+        <div class="tool-meta">
+          <a href="https://github.com/Tichau/FileConverter/releases" target="_blank" rel="noopener" class="meta-link">🔗 دانلود</a>
+          <a href="https://github.com/Tichau/FileConverter" target="_blank" rel="noopener" class="meta-link">🐙 گیتهاب</a>
+          <span class="meta-chip">📝 لایسنس: GPL-3.0</span>
+        </div>
+        <p>از اون برنامه‌هایی که وقتی نصبش می‌کنی می‌گی چرا زودتر پیداش نکرده بودم! یه ابزار تبدیل فرمت خفن که مستقیماً به منوی راست‌کلیک ویندوز اضافه می‌شه. کافیه روی هر فایلی (عکس، ویدیو، صدا و...) راست‌کلیک کنی و فرمت خروجی رو بزنی تا توی چند ثانیه تبدیل بشه. توی تنظیماتش هم می‌تونی کیفیت و فرمت‌ها رو شخصی‌سازی کنی. اوپن‌سورس و رایگان.</p>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-head">
+          <h2 class="tool-title">Nora</h2>
+          <span class="tool-number">18</span>
+        </div>
+        <div class="tool-meta">
+          <a href="https://sandakan.github.io/Nora-website/" target="_blank" rel="noopener" class="meta-link">🔗 دانلود</a>
+          <a href="https://github.com/Sandakan/Nora" target="_blank" rel="noopener" class="meta-link">🐙 گیتهاب</a>
+          <span class="meta-chip">📝 لایسنس: MIT</span>
+        </div>
+        <p>یه موزیک‌پلیر آفلاین فوق‌العاده زیبا و مینیمال برای پخش فایل‌های صوتی لوکال خودتون. من بین چند تا پلیری که برای آرشیو شخصیم تست کردم، با این یکی بیشتر از همه حال کردم و وایب خوبی داره. اوپن‌سورس و رایگان.</p>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-head">
+          <h2 class="tool-title">Sandboxie</h2>
+          <span class="tool-number">19</span>
+        </div>
+        <div class="tool-meta">
+          <a href="https://sandboxie-plus.com/downloads/" target="_blank" rel="noopener" class="meta-link">🔗 دانلود</a>
+          <a href="https://github.com/sandboxie-plus/Sandboxie" target="_blank" rel="noopener" class="meta-link">🐙 گیتهاب</a>
+          <span class="meta-chip">📝 لایسنس: GPL-3.0 (بعضی فیچرهای Plus پولیه)</span>
+        </div>
+        <p>یه ابزار امنیتی و همه‌فن‌حریف برای وقت‌هایی که یه فایل یا برنامه مشکوک داری و نمی‌دونی قراره چه بلایی سر سیستمت بیاره. این برنامه یه محیط کاملاً ایزوله و شبیه‌سازی‌شده (سندباکس) تو ویندوز درست می‌کنه؛ نرم‌افزار فکر می‌کنه داره روی سیستم واقعی اجرا می‌شه ولی در واقع توی یک جعبه‌ی بسته‌ست و هیچ آسیبی نمی‌تونه به ویندوزت بزنه. دو مدل پولی و رایگان داره که همون نسخه‌ی رایگانش کاملاً کار رو درمیاره. اوپن‌سورس و عالی.</p>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-head">
+          <h2 class="tool-title">LocalSend</h2>
+          <span class="tool-number">20</span>
+        </div>
+        <div class="tool-meta">
+          <a href="https://localsend.org/download" target="_blank" rel="noopener" class="meta-link">🔗 دانلود</a>
+          <a href="https://github.com/localsend/localsend" target="_blank" rel="noopener" class="meta-link">🐙 گیتهاب</a>
+          <span class="meta-chip">📝 لایسنس: MIT</span>
+        </div>
+        <p>بهترین و بی‌دردسرترین ابزار برای جابه‌جا کردن فایل و دیتا بین دیوایس‌های مختلف (گوشی، لپ‌تاپ و...) توی شبکه‌ی داخلی و وای‌فای. سرعتش عالیه و کار باهاش اصلاً پیچیدگی نداره. یه قابلیت خیلی خفن هم که داره و من عاشقشم، امکان کپی و پیست کردن متن (Clipboard) بین دستگاه‌هاست که بدجوری به کارم میاد. رایگان و اوپن‌سورس.</p>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-head">
+          <h2 class="tool-title">EarTrumpet</h2>
+          <span class="tool-number">21</span>
+        </div>
+        <div class="tool-meta">
+          <a href="https://eartrumpet.app/" target="_blank" rel="noopener" class="meta-link">🔗 دانلود</a>
+          <a href="https://github.com/File-New-Project/EarTrumpet" target="_blank" rel="noopener" class="meta-link">🐙 گیتهاب</a>
+          <span class="meta-chip">📝 لایسنس: MIT</span>
+        </div>
+        <p>اگه با بخش تنظیمات صدا و میکسرِ رو مخِ ویندوز ۱۱ داستان دارید، این برنامه نجاتتونه. میاد یه آیکون ولومِ جدا به تسک‌بار اضافه می‌کنه و میکسر صدای کلاسیک رو برمی‌گردونه. خوبیش اینه که فقط با یه کلیک، لیست تمام اپلیکیشن‌هایی که دارن صدا پخش می‌کنن رو جلوت باز می‌کنه تا بتونی خیلی سریع ولوم هر کدوم رو جداگانه کم و زیاد کنی، بدون این‌که نیاز باشه هی وارد صفحه میکسر بشی. رایگان و اوپن‌سورس.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    ساخته‌شده با <span class="heart">❤️</span> توسط معین (سمباده)
+  </footer>
+</body>
+</html>
