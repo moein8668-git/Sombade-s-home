@@ -373,12 +373,20 @@
         grid-template-columns: 1fr;
       }
       .link-card {
-        align-items: flex-start;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
         gap: 14px;
         padding: 18px;
       }
       .soon-badge {
+        grid-column: 1 / -1;
+        justify-self: stretch;
         margin-right: 0;
+        margin-top: 4px;
+        padding: 8px 12px;
+        border-radius: 14px;
+        text-align: center;
       }
     }
   </style>

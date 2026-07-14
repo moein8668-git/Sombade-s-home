@@ -364,23 +364,33 @@
     }
 
     @media (max-width: 760px) {
-      header { height: clamp(300px, 78vw, 460px); }
+      header { height: clamp(380px, 92vw, 520px); }
       .topbar {
         top: 14px;
         width: calc(100% - 28px);
+        gap: 10px;
+        padding: 10px 12px;
       }
       .brand {
-        font-size: 1.1rem;
+        font-size: clamp(0.95rem, 4.2vw, 1.1rem);
+        line-height: 1.25;
+        letter-spacing: -0.03em;
       }
       .hero-content {
-        bottom: 46px;
+        bottom: 80px;
         width: calc(100% - 28px);
       }
       h1 {
-        font-size: 1.85rem;
+        font-size: clamp(1.75rem, 8vw, 2.2rem);
+        line-height: 1.35;
+        margin-bottom: 8px;
+      }
+      .subtitle {
+        font-size: 0.92rem;
+        line-height: 1.9;
       }
       .container {
-        margin: -58px auto 42px;
+        margin: -34px auto 42px;
         padding: 0 14px;
       }
       .card {
