@@ -1,4 +1,4 @@
-(() => {
+﻿(() => {
   const lightTheme = 'light';
   const storageKey = 'sombade-theme';
 
@@ -22,11 +22,11 @@
     button.setAttribute('aria-pressed', String(isLight));
     button.setAttribute(
       'aria-label',
-      isLight ? 'فعال کردن تم شب' : 'فعال کردن تم روشن'
+      isLight ? 'فعال کردن تم شب' : 'فعال کردن تم یکم روشن'
     );
 
     icon.textContent = isLight ? '🌌' : '☀️';
-    label.textContent = isLight ? 'تم شب' : 'تم روشن';
+    label.textContent = isLight ? 'تم شب' : 'تم یکم روشن';
   };
 
   document.addEventListener('DOMContentLoaded', () => {
