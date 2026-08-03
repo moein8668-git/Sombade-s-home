@@ -1,17 +1,81 @@
 ---
-
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Sombade's Home | خونه سمباده" description="خونه سمباده؛ جایی برای اشتراک‌گذاری چیزای جالب." bodyClass="page-home">
+  <header>
+    <img src="/media/images/Main_banner.jpg" alt="Sombade's Home Banner" class="banner">
+    <div class="banner-overlay"></div>
+    <div class="banner-content">
+      <h1 class="site-title">Sombade's Home</h1>
+      <p class="subtitle">خونه سمباده · جایی برای اشتراک‌گذاری چیزای جالب</p>
+    </div>
+  </header>
+  <main class="container">
+    <section class="card">
+      <div class="intro-layout">
+        <img src="/media/images/profile.jpg" alt="عکس پروفایل معین" class="profile-pic">
+        <div>
+          <h2><span class="icon">👋</span></h2>
+          <p><span class="highlight">سلام سلام! خیلی خیلی خوش اومدید.</span></p>
+          <p>
+            من معینم. عاشق کامپیوتر، تکنولوژی، شبکه و کلا وایب کدم. خیلی دوست دارم برنامه‌نویسی رو هم حرفه‌ای یاد بگیرم، ولی این وایب کد بدجوری تنبلم کرده! 🤦‍♂️
+          </p>
+          <p>
+            دوست دارم چیزایی که بلدم و یاد گرفتم رو همون‌جوری که بقیه با اشتراک‌گذاری تو دنیای آزاد اطلاعات به من یاد دادن، منم به بقیه یاد بدم و در حد خودم مفید باشم.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2><span class="icon">🔗</span> لینک‌ها</h2>
+      <p>اینجا لینک صفحات مختلف وبلاگم رو می‌ذارم. فعلا در حال ساختن هستن:</p>
+      <div class="links-grid">
+        <a href="/tools" class="link-card">
+          <div class="link-icon">🛠️</div>
+          <div class="link-info">
+            <h3>ابزارها و اپلیکیشن‌های اوپن‌سورس</h3>
+            <p>لیست ابزارهای رایگانی که خودم استفاده می‌کنم.</p>
+          </div>
+          <span class="soon-badge">باز کردن</span>
+        </a>
+        <a href="/tutorials" class="link-card">
+          <div class="link-icon">📚</div>
+          <div class="link-info">
+            <h3>آموزش‌های سمباده</h3>
+            <p>آموزش‌هایی که خودم می‌نویسم و باهاتون به اشتراک می‌ذارم.</p>
+          </div>
+          <span class="soon-badge">باز کردن</span>
+        </a>
+        <a href="/live-background" class="link-card">
+          <div class="link-icon">🌌</div>
+          <div class="link-info">
+            <h3>لایو بک‌گراند سمباده</h3>
+            <p>صفحه معرفی و دانلود بک‌گراند زنده من.</p>
+          </div>
+          <span class="soon-badge">باز کردن</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2><span class="icon">💬</span> ارتباط با من</h2>
+      <p>اگر خواستید چیزی بهم بگید یا گپ بزنیم، هم تو تلگرام و هم توییتر در خدمتتون هستم.</p>
+      <div class="contact-grid">
+        <a href="https://t.me/moein8668" target="_blank" rel="noopener" class="contact-btn telegram">
+          <span>✈️</span> تلگرام
+        </a>
+        <a href="https://x.com/moein8668" target="_blank" rel="noopener" class="contact-btn twitter">
+          <span>🐦</span> توییتر / X
+        </a>
+        <a href="https://github.com/moein8668-git" target="_blank" rel="noopener" class="contact-btn github">
+          <span>🐙</span> گیت‌هاب
+        </a>
+        <a href="https://t.me/SombadesHome" target="_blank" rel="noopener" class="contact-btn telegram-channel">
+          <span>📣</span> کانال تلگرام
+        </a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

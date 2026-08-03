@@ -1,0 +1,33 @@
+---
+interface Props {
+  bannerSrc: string;
+  bannerAlt: string;
+  title: string;
+  subtitle: string;
+  brand?: string;
+  backHref?: string;
+  backLabel?: string;
+}
+
+const {
+  bannerSrc,
+  bannerAlt,
+  title,
+  subtitle,
+  brand = "Sombade's Tutorials",
+  backHref = '/tutorials',
+  backLabel = 'برگشت به لیست آموزش‌ها',
+} = Astro.props;
+---
+<header>
+  <img src={bannerSrc} alt={bannerAlt} class="banner" />
+  <div class="banner-overlay"></div>
+  <div class="topbar">
+    <h2 class="brand">{brand}</h2>
+    <a href={backHref} class="home-link" aria-label={backLabel}>⌂</a>
+  </div>
+  <div class="hero-content">
+    <h1>{title}</h1>
+    <p class="subtitle">{subtitle}</p>
+  </div>
+</header>

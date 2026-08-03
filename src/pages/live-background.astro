@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="لایو بک‌گراند سمباده | Sombade's Live Background" description="معرفی، دانلود و راهنمای پریست‌های بک‌گراند زنده." bodyClass="page-live-background">
+  <header>
+    <img src="/media/images/ken-kaneki.jpg" alt="Live background preview banner" class="banner">
+    <div class="banner-overlay"></div>
+    <div class="topbar">
+      <h2 class="brand">Sombade's Live Background</h2>
+      <a href="/" class="home-link" aria-label="برگشت به خونه سمباده">⌂</a>
+    </div>
+    <div class="hero-content">
+      <h1>لایو بک‌گراند سمباده</h1>
+      <p class="subtitle">صفحه معرفی، دانلود و راهنمای پریست‌های بک‌گراند زنده.</p>
+    </div>
+  </header>
+  <main class="container">
+    <section class="card story">
+      <h2><span>🌌</span> معرفی</h2>
+      <p>توی لیست ابزارهایی که معرفی کردم، اپلیکیشن Lively Wallpaper رو یادتونه؟ اون‌جا قول داده بودم بک‌گراندی که خودم براش وایب کد کردم رو باهاتون به اشتراک بذارم. برعکس بیشتر بک‌گراندهای لایولی که فقط یه صفحه‌ی ساده هستن و فوقش می‌شه چند تا گزینه‌ی محدودشون رو کاستوم کرد، این یکی برای خودش یه پریست منیجر (Preset Manager) داره!</p>
+      <p>داستان از این‌جا شروع شد که من عاشق تنوع تو بک‌گراندم و ظاهر دسکتاپم زود برام تکراری می‌شه. قبلاً مجبور بودم کلی از بک‌گراند کپی بگیرم، تک‌تک با لایولی شخصی‌سازی‌شون کنم و مدام دستی عوضشون کنم که واقعاً رو مخ بود. خلاصه با همفکری و مشورت با رفیق خوبمون جناب ChatGPT، آستین‌ها رو بالا زدم و براش یه پریست منیجر نوشتم. حالا نه‌تنها می‌تونید پریست‌های مختلف رو ذخیره و هروقت خواستید اعمال کنید، بلکه می‌تونید یه لیست ازشون بسازید تا به صورت اسلایدشو خودشون جابه‌جا بشن. (توی ویدیوی همین صفحه می‌تونید نحوه جابه‌جا شدن بین پریست‌ها رو ببینید).</p>
+      <p>این لینک گیت‌هاب پروژه منه:<br><a href="https://github.com/moein8668-git/mt17-lively-wallpaper" target="_blank" rel="noopener">https://github.com/moein8668-git/mt17-lively-wallpaper</a></p>
+      <p>نحوه نصب، راه انداختن و همه‌ی جزئیات رو کامل هم به فارسی و هم انگلیسی توی گیت‌هاب نوشتم. با این حال اگه باز هم موقع کار باهاش به مشکلی خوردید، می‌تونید به خودم پیام بدید یا خیلی راحت متن ریدمی (Readme) پروژه رو کپی کنید و بدید به یه هوش مصنوعی تا سریع راهنمایی‌تون کنه.</p>
+      <p>یکی از قابلیت‌های محبوب خودم تو این بک‌گراند، امکان بکاپ گرفتن از پریست‌هاست؛ یعنی می‌تونی هم فقط تنظیمات رو بکاپ بگیری و هم کل تنظیمات رو همراه با فایل‌های مدیا و فونت‌ها بسته‌بندی کنی و بعداً برگردونی.</p>
+      <p>راستی، من پریست‌های شخصی خودم رو توی <a href="https://t.me/SombadesHome" target="_blank" rel="noopener">کانال تلگرام</a> براتون آپلود می‌کنم. می‌تونید خیلی راحت از این پریست‌های من استفاده کنید، هر جاش رو که دلتون خواست به سلیقه خودتون تغییر بدید و دوباره توی پریست‌های خودتون ذخیره‌ش کنید.<br>چرا تو خود سایت نمی‌ذارم؟<br>راستش یکم از داستان‌های کپی‌رایت می‌ترسم؛ آخه قبلاً سر این موضوع بدجوری دمیج خوردم! 🤦‍♂️🤦‍♂️</p>
+      <p>توی همین صفحه هم می‌تونید یه سری از پریست‌های خودم رو ببینید تا دستتون بیاد این بک‌گراند چقدر جای کار داره و چه وایبی به دسکتاپتون میده.</p>
+    </section>
+
+    <section class="card">
+      <h2><span>🖼️</span> پیش‌نمایش</h2>
+      <div class="preview-grid">
+        <div class="preview-frame">
+          <video src="/media/video/Slide.mov" autoplay muted loop playsinline></video>
+          <span class="preview-label">Slideshow Example</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2><span>⚙️</span> پریست‌ها</h2>
+      <div class="preset-grid">
+        <a href="https://t.me/SombadesHome/5" target="_blank" rel="noopener" class="preset-card">
+          <div class="preset-video">
+            <video src="/media/video/subaro.mov" autoplay muted loop playsinline></video>
+          </div>
+          <div class="preset-info">
+            <h3>Subaro</h3>
+          </div>
+        </a>
+        <a href="https://t.me/SombadesHome/3" target="_blank" rel="noopener" class="preset-card">
+          <div class="preset-video">
+            <video src="/media/video/eren.mov" autoplay muted loop playsinline></video>
+          </div>
+          <div class="preset-info">
+            <h3>Eren</h3>
+          </div>
+        </a>
+        <a href="https://t.me/SombadesHome/4" target="_blank" rel="noopener" class="preset-card">
+          <div class="preset-video">
+            <video src="/media/video/Yagami.mov" autoplay muted loop playsinline></video>
+          </div>
+          <div class="preset-info">
+            <h3>Yagami</h3>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

@@ -1,0 +1,35 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+
+  return Promise.all(
+    posts.map(async (post) => ({
+      params: { slug: post.id },
+      props: { post, content: await render(post) },
+    })),
+  );
+}
+
+const { post, content } = Astro.props;
+const { Content } = content;
+---
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <SiteHeader
+    bannerSrc={post.data.banner}
+    bannerAlt={post.data.bannerAlt}
+    title={post.data.title}
+    subtitle={post.data.description}
+  />
+  <main class="container">
+    <article class="card story tutorial-content">
+      <Content />
+      <div class="action-row">
+        <a href="/tutorials" class="action-btn">برگشت به لیست آموزش‌ها</a>
+      </div>
+    </article>
+  </main>
+</BaseLayout>

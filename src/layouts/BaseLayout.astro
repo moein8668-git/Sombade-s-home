@@ -1,0 +1,55 @@
+---
+import ThemeToggle from '../components/ThemeToggle.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  bodyClass?: string;
+}
+
+const { title, description = '', bodyClass = 'page-tutorials' } = Astro.props;
+---
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;800&family=Vazirmatn:wght@300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <script is:inline src="/js/theme.js"></script>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body class={bodyClass}>
+    <div class="noise"></div>
+    <ThemeToggle />
+    <slot />
+    <Footer />
+    <script is:inline>
+      document.addEventListener('DOMContentLoaded', () => {
+        const topbar = document.querySelector('.topbar');
+        const heroContent = document.querySelector('.hero-content');
+
+        if (!topbar || !heroContent) return;
+
+        const updateTopbarState = () => {
+          const topbarBottom = topbar.getBoundingClientRect().bottom;
+          const heroTop = heroContent.getBoundingClientRect().top;
+          const isScrolled = heroTop <= topbarBottom;
+          topbar.classList.toggle('is-scrolled', isScrolled);
+          document.body.classList.toggle('has-sticky-topbar', isScrolled);
+        };
+
+        updateTopbarState();
+        window.addEventListener('scroll', updateTopbarState, { passive: true });
+        window.addEventListener('resize', updateTopbarState);
+      });
+    </script>
+  </body>
+</html>
