@@ -386,7 +386,13 @@ footer .heart { display: inline-block; color: var(--accent); animation: pulse 2.
   .theme-toggle { left: 14px; bottom: 14px; min-height: 40px; padding: 7px 10px; }
   .theme-toggle__label { display: none; }
   .settings-toggle { left: 14px; bottom: 14px; }
-  .display-settings { top: 12px; right: 12px; }
+  .display-settings {
+    top: auto;
+    right: auto;
+    left: 14px;
+    bottom: 62px;
+    transform: translateY(8px);
+  }
   .display-settings__label:nth-of-type(2),
   .display-settings__width-row,
   .display-settings__range,
