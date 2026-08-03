@@ -1,43 +1,36 @@
-# Astro Starter Kit: Minimal
+# Sombade's Home
 
-```sh
-npm create astro@latest -- --template minimal
+وبلاگ شخصی معین (سمباده)، ساخته‌شده با Astro و MDX.
+
+## اجرا در محیط توسعه
+
+```bash
+npm install
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## ساخت نسخه‌ی production
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```bash
+npm run build
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+خروجی نهایی در پوشه‌ی `dist/` ساخته می‌شود.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## ساختار اصلی
 
-Any static assets, like images, can be placed in the `public/` directory.
+- `src/pages/`: صفحات خانه، ابزارها، آموزش‌ها و دمو
+- `src/content/blog/`: پست‌های MDX
+- `src/components/`: کامپوننت‌های مشترک Astro
+- `public/css/`: استایل اصلی سایت
+- `public/js/`: منطق تم، تنظیمات نمایش، کپی کد و Lightbox
+- `public/media/`: تصاویر و ویدیوها
 
-## 🧞 Commands
+## استقرار در Cloudflare Pages
 
-All commands are run from the root of the project, from a terminal:
+- Build command: `npm run build`
+- Output directory: `dist`
+- Production branch: `main`
+- Node version: `22.12.0`
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+آدرس اصلی سایت: [moein8668.ir](https://moein8668.ir)
