@@ -329,8 +329,10 @@ footer .heart { display: inline-block; color: var(--accent); animation: pulse 2.
 
 .display-settings {
   position: fixed;
-  top: 18px;
-  right: 18px;
+  top: auto;
+  right: auto;
+  left: 22px;
+  bottom: 72px;
   z-index: 30;
   width: min(294px, calc(100vw - 36px));
   padding: 16px;
@@ -341,7 +343,7 @@ footer .heart { display: inline-block; color: var(--accent); animation: pulse 2.
   box-shadow: 0 20px 60px rgba(0, 0, 0, .34);
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-8px);
+  transform: translateY(8px);
   transition: opacity .2s ease, visibility .2s ease, transform .2s ease;
 }
 .display-settings.is-open { opacity: 1; visibility: visible; transform: translateY(0); }
