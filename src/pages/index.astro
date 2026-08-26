@@ -1,20 +1,24 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import TopBar from '../components/TopBar.astro';
+import LatestPosts from '../components/LatestPosts.astro';
 ---
 
 <BaseLayout title="Sombade's Home | خونه سمباده" description="خونه سمباده؛ جایی برای اشتراک‌گذاری چیزای جالب." bodyClass="page-home">
   <header>
-    <img src="/media/images/Main_banner.jpg" alt="Sombade's Home Banner" class="banner">
+    <img src="/media/images/Main_banner.jpg" alt="Sombade's Home Banner" class="banner" loading="eager" fetchpriority="high">
     <div class="banner-overlay"></div>
-    <div class="banner-content">
-      <h1 class="site-title">Sombade's Home</h1>
+    <TopBar brand="Sombade's Home" active="/" />
+    <div class="hero-content">
+      <p class="hero-kicker" dir="ltr">SOMBADE · HOME</p>
+      <h1 class="site-title-hero">Sombade's Home</h1>
       <p class="subtitle">خونه سمباده · جایی برای اشتراک‌گذاری چیزای جالب</p>
     </div>
   </header>
-  <main class="container">
+  <main id="main" class="container">
     <section class="card">
       <div class="intro-layout">
-        <img src="/media/images/profile.jpg" alt="عکس پروفایل معین" class="profile-pic">
+        <img src="/media/images/profile.jpg" alt="عکس پروفایل معین" class="profile-pic" loading="lazy" width="148" height="148">
         <div>
           <h2><span class="icon">👋</span></h2>
           <p><span class="highlight">سلام سلام! خیلی خیلی خوش اومدید.</span></p>
@@ -26,6 +30,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </p>
         </div>
       </div>
+    </section>
+
+    {/* UPDATE: آخرین مطالب — به صورت خودکار از کالکشن blog ساخته می‌شود */}
+    <section class="card">
+      <h2><span class="icon">✍️</span> آخرین نوشته‌ها</h2>
+      <LatestPosts />
     </section>
 
     <section class="card">

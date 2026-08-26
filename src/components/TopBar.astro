@@ -1,0 +1,32 @@
+---
+interface Props {
+  brand?: string;
+  active?: string;
+}
+
+const { brand = "Sombade's Home", active } = Astro.props;
+
+const rawPath = Astro.url.pathname.replace(/\/+$/, '');
+const currentPath = active ?? (rawPath || '/');
+
+const links = [
+  { href: '/', label: 'خانه' },
+  { href: '/tutorials', label: 'آموزش‌ها' },
+];
+---
+<nav class="topbar" id="topbar" aria-label="ناوبری اصلی">
+  <a class="brand" href="/" dir="ltr">{brand}</a>
+  <ul class="topbar-nav">
+    {links.map((link) => (
+      <li>
+        <a
+          href={link.href}
+          class:list={[{ 'active': currentPath === link.href }]}
+          aria-current={currentPath === link.href ? 'page' : undefined}
+        >
+          {link.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>

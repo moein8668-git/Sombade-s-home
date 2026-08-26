@@ -1,9 +1,19 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import TopBar from '../components/TopBar.astro';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const faDigits = (value: number | string) =>
+  String(value).replace(/\d/g, (d) => '۰۱۲۳۴۵۶۷۸۹'[Number(d)]);
+
+const faDate = (date: Date) =>
+  new Intl.DateTimeFormat('fa-IR', { year: 'numeric', month: 'long' }).format(date);
+
+const readMinutes = (body: string) =>
+  Math.max(2, Math.round(body.trim().split(/\s+/).length / 170));
 ---
 
 <BaseLayout
@@ -12,19 +22,21 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
   bodyClass="page-tutorials"
 >
   <header>
-    <img src="/media/images/tutorials_banner.jpg" alt="Sombade's Tutorials Banner" class="banner" />
+    <img src="/media/images/tutorials_banner.jpg" alt="Sombade's Tutorials Banner" class="banner" loading="eager" fetchpriority="high" />
     <div class="banner-overlay"></div>
-    <div class="topbar">
-      <h2 class="brand">Sombade's Tutorials</h2>
-      <a href="/" class="home-link" aria-label="برگشت به خونه سمباده">⌂</a>
-    </div>
+    <TopBar brand="Sombade's Tutorials" active="/tutorials" />
     <div class="hero-content">
+      <p class="hero-kicker">SOMBADE · TUTORIALS</p>
       <h1>آموزش‌های سمباده</h1>
       <p class="subtitle">چیزایی که بلدم رو به شکل آموزش باهاتون به اشتراک می‌ذارم.</p>
     </div>
+    <div class="hero-index" aria-hidden="true">
+      <b>{String(posts.length).padStart(2, '0')}</b>
+      <span>GUIDES</span>
+    </div>
   </header>
 
-  <main class="container">
+  <main id="main" class="container">
     <section class="card">
       <h2><span class="icon">📚</span> معرفی</h2>
       <p><span class="highlight">دمتون گرم که تا این‌جا اومدید!</span></p>
@@ -33,18 +45,51 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
     </section>
 
     <section class="card">
-      <h2><span class="icon">🔗</span> لیست آموزش‌ها</h2>
-      <div class="links-grid">
-        {posts.map((post) => (
-          <a href={`/${post.id}`} class="link-card">
-            <div class="link-icon">{post.id === 'openwrt-on-proxmox' ? '🌐' : '🖥️'}</div>
-            <div class="link-info">
-              <h3>{post.data.title}</h3>
-              <p>{post.data.description}</p>
-            </div>
-            <span class="soon-badge">باز کردن</span>
-          </a>
+      <div class="tut-list-head">
+        <h2><span class="icon">🔗</span> لیست آموزش‌ها</h2>
+        <span class="count-chip">{faDigits(posts.length)} آموزش منتشرشده</span>
+      </div>
+      <div class="tut-list">
+        {posts.map((post, index) => (
+          <article class="tut-card">
+            <a class="tut-link" href={`/${post.id}`}>
+              <div class="tut-body">
+                <div class="tool-meta">
+                  {index === 0 && <span class="meta-chip hot">جدیدترین</span>}
+                  <span class="meta-chip">⏱ ~{faDigits(readMinutes(post.body ?? ''))} دقیقه</span>
+                  <span class="meta-chip">{faDate(post.data.pubDate)}</span>
+                  {post.data.tags.map((tag) => (
+                    <span class="meta-chip">{tag}</span>
+                  ))}
+                </div>
+                <h3>{post.data.title}</h3>
+                <p>{post.data.description}</p>
+                <span class="open-cta">باز کردن <span class="arrow">←</span></span>
+              </div>
+              <div class="tut-media">
+                <img
+                  src={post.data.banner}
+                  alt={post.data.bannerAlt}
+                  loading="lazy"
+                  decoding="async"
+                  width="640"
+                  height="360"
+                />
+              </div>
+            </a>
+          </article>
         ))}
+        <article class="tut-card tut-soon" aria-disabled="true">
+          <div class="tut-link">
+            <div class="tut-body">
+              <div class="tool-meta"><span class="meta-chip">✍️ در حال نوشتن</span></div>
+              <h3>آموزش بعدی در راهه…</h3>
+              <p>موضوع بعدی به زودی منتشر می‌شه.</p>
+              <span class="soon-badge">به‌زودی</span>
+            </div>
+            <div class="tut-media"><span>؟</span></div>
+          </div>
+        </article>
       </div>
     </section>
   </main>

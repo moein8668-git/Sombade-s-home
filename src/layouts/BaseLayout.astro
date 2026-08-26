@@ -6,9 +6,31 @@ interface Props {
   title: string;
   description?: string;
   bodyClass?: string;
+  ogType?: string;
+  ogImage?: string;
+  publishedTime?: string;
 }
 
-const { title, description = '', bodyClass = 'page-tutorials' } = Astro.props;
+const {
+  title,
+  description = '',
+  bodyClass = 'page-tutorials',
+  ogType = 'website',
+  ogImage,
+  publishedTime,
+} = Astro.props;
+
+const site = Astro.site ?? new URL('https://moein8668.ir');
+const canonical = new URL(Astro.url.pathname, site).toString();
+const resolvedOgImage = ogImage ? new URL(ogImage, site).toString() : new URL('/media/images/Main_banner.jpg', site).toString();
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: "Sombade's Home",
+  url: site.toString(),
+  inLanguage: 'fa-IR',
+};
 ---
 <!doctype html>
 <html lang="fa" dir="rtl">
@@ -17,21 +39,42 @@ const { title, description = '', bodyClass = 'page-tutorials' } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/png" href="/blog.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;800&family=Vazirmatn:wght@300;400;500;700;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800&family=Vazirmatn:wght@300;400;500;700;800;900&display=swap"
       rel="stylesheet"
     />
+    <link rel="alternate" type="application/rss+xml" title="آموزش‌های سمباده" href="/feed.xml" />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={resolvedOgImage} />
+    <meta property="og:locale" content="fa_IR" />
+    <meta property="og:site_name" content="Sombade's Home" />
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    {description && <meta name="twitter:description" content={description} />}
+    <meta name="twitter:image" content={resolvedOgImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)} />
+    {bodyClass === 'page-home' && (
+      <link rel="preload" as="image" href="/media/images/Main_banner.jpg" />
+    )}
     <script is:inline src="/js/theme.js"></script>
     <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body class={bodyClass}>
+    <a class="skip-link" href="#main">پرش به محتوا</a>
     <div class="noise"></div>
     <ThemeToggle />
+    <div class="reading-progress" aria-hidden="true"></div>
     <slot />
     <Footer />
+    <button class="back-to-top" type="button" aria-label="بازگشت به بالای صفحه">↑</button>
     <script is:inline>
       document.addEventListener('DOMContentLoaded', () => {
         const topbar = document.querySelector('.topbar');
@@ -50,6 +93,186 @@ const { title, description = '', bodyClass = 'page-tutorials' } = Astro.props;
         updateTopbarState();
         window.addEventListener('scroll', updateTopbarState, { passive: true });
         window.addEventListener('resize', updateTopbarState);
+
+        // ========================================
+        // Reading progress bar
+        // ========================================
+        const progressBar = document.querySelector('.reading-progress');
+        if (progressBar) {
+          const updateProgress = () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? Math.min(1, scrollTop / docHeight) : 0;
+            progressBar.style.transform = `scaleX(${progress})`;
+          };
+          updateProgress();
+          window.addEventListener('scroll', updateProgress, { passive: true });
+          window.addEventListener('resize', updateProgress);
+        }
+
+        // ========================================
+        // Back to top button
+        // ========================================
+        const backToTop = document.querySelector('.back-to-top');
+        if (backToTop) {
+          const toggleBackToTop = () => {
+            backToTop.classList.toggle('is-visible', window.scrollY > 600);
+          };
+          toggleBackToTop();
+          window.addEventListener('scroll', toggleBackToTop, { passive: true });
+          backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+        }
+
+        // ========================================
+        // Table of contents for tutorials
+        // ========================================
+        const article = document.querySelector('.tutorial-content');
+        if (article) {
+          const headings = Array.from(article.querySelectorAll('h2, h3'));
+          if (headings.length >= 4) {
+            headings.forEach((heading, index) => {
+              if (!heading.id) heading.id = 'sec-' + index;
+            });
+
+            const buildList = () => {
+              const list = document.createElement('ul');
+              headings.forEach((heading) => {
+                const item = document.createElement('li');
+                item.className = heading.tagName === 'H3' ? 'toc-h3' : 'toc-h2';
+                const link = document.createElement('a');
+                link.href = '#' + heading.id;
+                link.textContent = heading.textContent;
+                link.dataset.target = heading.id;
+                item.appendChild(link);
+                list.appendChild(item);
+              });
+              return list;
+            };
+
+            const activate = (id) => {
+              document.querySelectorAll('.toc a').forEach((link) => {
+                link.classList.toggle('on', link.dataset.target === id);
+              });
+              const activeDesktopLink = desktopToc.querySelector(`a[data-target="${id}"]`);
+              if (activeDesktopLink && typeof activeDesktopLink.scrollIntoView === 'function') {
+                activeDesktopLink.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+              }
+            };
+
+            const desktopToc = document.createElement('aside');
+            desktopToc.className = 'toc toc-desktop';
+            desktopToc.setAttribute('aria-label', 'فهرست مطالب');
+            const tocHead = document.createElement('div');
+            tocHead.className = 'toc-head';
+            const titleEl = document.createElement('p');
+            titleEl.className = 'toc-title';
+            titleEl.textContent = 'در این آموزش';
+            tocHead.appendChild(titleEl);
+            const hideBtn = document.createElement('button');
+            hideBtn.type = 'button';
+            hideBtn.className = 'toc-hide-btn';
+            hideBtn.textContent = 'بستن ✕';
+            tocHead.appendChild(hideBtn);
+            desktopToc.appendChild(tocHead);
+            desktopToc.appendChild(buildList());
+
+            article.after(desktopToc);
+
+            const drawer = document.createElement('aside');
+            drawer.className = 'toc toc-drawer';
+            drawer.setAttribute('aria-label', 'فهرست مطالب');
+            const drawerTitle = document.createElement('p');
+            drawerTitle.className = 'toc-title';
+            drawerTitle.textContent = 'در این آموزش';
+            drawer.appendChild(drawerTitle);
+            drawer.appendChild(buildList());
+
+            const overlay = document.createElement('div');
+            overlay.className = 'toc-overlay';
+
+            const fab = document.createElement('button');
+            fab.type = 'button';
+            fab.className = 'toc-fab';
+            fab.textContent = '☰ فهرست';
+
+            document.body.appendChild(overlay);
+            document.body.appendChild(drawer);
+            document.body.appendChild(fab);
+
+            const closeDrawer = () => {
+              drawer.classList.remove('is-open');
+              overlay.classList.remove('is-open');
+            };
+            const syncTocTop = () => {
+              const topbar = document.querySelector('.topbar');
+              if (!topbar) return;
+              const top = Math.round(topbar.getBoundingClientRect().bottom + 10) + 'px';
+              fab.style.top = top;
+              drawer.style.top = top;
+            };
+            syncTocTop();
+            window.addEventListener('scroll', syncTocTop, { passive: true });
+            window.addEventListener('resize', syncTocTop);
+            fab.addEventListener('click', () => {
+              drawer.classList.add('is-open');
+              overlay.classList.add('is-open');
+            });
+            overlay.addEventListener('click', closeDrawer);
+            drawer.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeDrawer));
+            document.addEventListener('keydown', (e) => {
+              if (e.key === 'Escape') closeDrawer();
+            });
+
+            document.body.classList.add('has-toc');
+
+            const showBtn = document.createElement('button');
+            showBtn.type = 'button';
+            showBtn.className = 'toc-show';
+            showBtn.textContent = '☰';
+            showBtn.setAttribute('aria-label', 'نمایش فهرست مطالب');
+            article.before(showBtn);
+            const setTocHidden = (hidden) => {
+              document.body.classList.toggle('toc-hidden', hidden);
+              try {
+                if (hidden) localStorage.setItem('toc-hidden', '1');
+                else localStorage.removeItem('toc-hidden');
+              } catch (e) { /* storage unavailable */ }
+            };
+            hideBtn.addEventListener('click', () => setTocHidden(true));
+            showBtn.addEventListener('click', () => setTocHidden(false));
+            try {
+              if (localStorage.getItem('toc-hidden') === '1') document.body.classList.add('toc-hidden');
+            } catch (e) { /* storage unavailable */ }
+
+            const syncShowBtn = () => {
+              const topbar = document.querySelector('.topbar');
+              const cardRect = article.getBoundingClientRect();
+              const tbBottom = topbar ? topbar.getBoundingClientRect().bottom : 0;
+              const size = showBtn.offsetWidth || 40;
+              const left = Math.min(cardRect.right + 12, window.innerWidth - size - 12);
+              const top = Math.max(cardRect.top, tbBottom + 10);
+              showBtn.style.insetInlineStart = 'auto';
+              showBtn.style.left = Math.round(left) + 'px';
+              showBtn.style.top = Math.round(top) + 'px';
+            };
+            syncShowBtn();
+            window.addEventListener('scroll', syncShowBtn, { passive: true });
+            window.addEventListener('resize', syncShowBtn);
+
+            const visibleMap = new Map();
+            const observer = new IntersectionObserver(
+              (entries) => {
+                entries.forEach((entry) => visibleMap.set(entry.target.id, entry.isIntersecting));
+                const firstVisible = headings.find((h) => visibleMap.get(h.id));
+                if (firstVisible) activate(firstVisible.id);
+              },
+              { rootMargin: '-90px 0px -65% 0px' }
+            );
+            headings.forEach((heading) => observer.observe(heading));
+          }
+        }
       });
     </script>
   </body>

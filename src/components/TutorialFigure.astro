@@ -7,5 +7,5 @@ interface Props {
 const { src, alt } = Astro.props;
 ---
 <figure class="tutorial-figure">
-  <img src={src} alt={alt} />
+  <img src={src} alt={alt} loading="lazy" decoding="async" />
 </figure>

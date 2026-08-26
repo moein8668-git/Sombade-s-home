@@ -1,21 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import TopBar from '../components/TopBar.astro';
 ---
 
 <BaseLayout title="لایو بک‌گراند سمباده | Sombade's Live Background" description="معرفی، دانلود و راهنمای پریست‌های بک‌گراند زنده." bodyClass="page-live-background">
   <header>
-    <img src="/media/images/ken-kaneki.jpg" alt="Live background preview banner" class="banner">
+    <img src="/media/images/ken-kaneki.jpg" alt="Live background preview banner" class="banner" loading="eager" fetchpriority="high">
     <div class="banner-overlay"></div>
-    <div class="topbar">
-      <h2 class="brand">Sombade's Live Background</h2>
-      <a href="/" class="home-link" aria-label="برگشت به خونه سمباده">⌂</a>
-    </div>
+    <TopBar brand="Sombade's Live Background" active="/live-background" />
     <div class="hero-content">
       <h1>لایو بک‌گراند سمباده</h1>
       <p class="subtitle">صفحه معرفی، دانلود و راهنمای پریست‌های بک‌گراند زنده.</p>
     </div>
   </header>
-  <main class="container">
+  <main id="main" class="container">
     <section class="card story">
       <h2><span>🌌</span> معرفی</h2>
       <p>توی لیست ابزارهایی که معرفی کردم، اپلیکیشن Lively Wallpaper رو یادتونه؟ اون‌جا قول داده بودم بک‌گراندی که خودم براش وایب کد کردم رو باهاتون به اشتراک بذارم. برعکس بیشتر بک‌گراندهای لایولی که فقط یه صفحه‌ی ساده هستن و فوقش می‌شه چند تا گزینه‌ی محدودشون رو کاستوم کرد، این یکی برای خودش یه پریست منیجر (Preset Manager) داره!</p>

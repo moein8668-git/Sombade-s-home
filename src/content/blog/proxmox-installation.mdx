@@ -1,9 +1,10 @@
 ---
 title: "آموزش نصب Proxmox"
 description: "نصب و راه‌اندازی Proxmox."
-pubDate: 2026-07-20
+pubDate: 2026-07-25
 banner: "/media/images/proxmox-installation/Banner.jpg"
 bannerAlt: "Proxmox tutorial banner"
+tags: ["هایپروایزر", "مجازی‌سازی"]
 draft: false
 ---
 
@@ -64,8 +65,10 @@ import TutorialFigure from '../../components/TutorialFigure.astro';
     
     <TutorialFigure src="/media/images/proxmox-installation/2.jpg" alt="پیام موفقیت نصب Ventoy" /> <TutorialFigure src="/media/images/proxmox-installation/3.jpg" alt="نمایش نسخه Ventoy روی فلش" />
     
-    نکته دم‌دستی: توی منوی `Options` برنامه می‌تونید تنظیمات پارتیشن‌بندی (`MBR`/`GPT`) یا `Secure Boot` رو دستکاری کنید، ولی در ۹۰ درصد مواقع دست به چیزی نزنید و بذارید روی همان تنظیمات پیش‌فرض بمونه چون کاملاً جوابه.
-    
+    <div class="co co-tip">
+    <b>نکته دم‌دستی</b>
+    توی منوی `Options` برنامه می‌تونید تنظیمات پارتیشن‌بندی (`MBR`/`GPT`) یا `Secure Boot` رو دستکاری کنید، ولی در ۹۰ درصد مواقع دست به چیزی نزنید و بذارید روی همان تنظیمات پیش‌فرض بمونه چون کاملاً جوابه.
+    </div>
 5.  خب، بخش سخت کار تموم شد! حالا فلش شما آماده‌ست. کافیه فایل ISO پراکسماکس رو که اول کار دانلود کردید، کپی کنید و بندازید کف فلشتون؛ دقیقاً مثل یه فایل معمولی. تمام! فلش بوت ما حاضره.
     
 
@@ -105,11 +108,15 @@ _(دکمه‌ی منوی بوت توی ۹۹ درصد مادربورد‌های �
 
 <TutorialFigure src="/media/images/proxmox-installation/7.jpg" alt="Install Proxmox VE" /> <TutorialFigure src="/media/images/proxmox-installation/8.jpg" alt="صفحه EULA و دکمه I Agree" />
 
-⚠️ **یک نکته خیلی مهم:** اگه توی این مرحله با این ارور اعصاب‌خردکن مواجه شدید:
+<div class="co co-warn">
+<b>یک نکته خیلی مهم</b>
+
+اگه توی این مرحله با این ارور اعصاب‌خردکن مواجه شدید:
 
 <TutorialFigure src="/media/images/proxmox-installation/9.jpg" alt="ارور غیرفعال بودن مجازی‌سازی پردازنده" />
 
 معنیش اینه که اون قابلیت مجازی‌سازی پردازنده (`Intel VT-x` یا `AMD-V`) رو که بالاتر توضیح دادم، توی بایوس روشن نکردید یا ذخیره نشده. سیستم رو ری‌استارت کنید، اول اون رو فعال کنید و دوباره تا این‌جا بیاید.
+</div>
 
 ### قدم چهارم: تنظیمات و پارتیشن‌بندی هارد
 
@@ -177,9 +184,13 @@ _(دکمه‌ی منوی بوت توی ۹۹ درصد مادربورد‌های �
 
 <TutorialFigure src="/media/images/proxmox-installation/19.jpg" alt="صفحه لاگین Proxmox" />
 
+<div class="co co-info">
+<b>پاپ‌آپ No Valid Subscription</b>
+
 به محض ورود، یک ارور پاپ‌آپ با مضمون `No Valid Subscription` می‌بینید. پراکسماکس کاملاً اوپن‌سورس و رایگانه و این ارور فقط داره می‌گه شما اشتراک پشتیبانی تجاری ندارید. خیلی راحت روی `OK` بزنید تا بسته بشه.
 
 <TutorialFigure src="/media/images/proxmox-installation/20.jpg" alt="پاپ‌آپ No Valid Subscription" />
+</div>
 
 تبریک می‌گم! شما با موفقیت وارد داشبورد مدیریتی سرور پراکسماکس خودتون شدید. 🥳💻
 

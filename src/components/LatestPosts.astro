@@ -1,0 +1,16 @@
+---
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+const faDate = (date: Date) =>
+  new Intl.DateTimeFormat('fa-IR', { year: 'numeric', month: 'long' }).format(date);
+---
+{posts.map((post) => (
+  <a class="pn" href={`/${post.id}`}>
+    <small>جدیدترین آموزش · {faDate(post.data.pubDate)}</small>
+    <span>{post.data.title} — {post.data.description}</span>
+  </a>
+))}

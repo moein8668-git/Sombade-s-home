@@ -1,12 +1,12 @@
 ---
+import TopBar from './TopBar.astro';
+
 interface Props {
   bannerSrc: string;
   bannerAlt: string;
   title: string;
   subtitle: string;
   brand?: string;
-  backHref?: string;
-  backLabel?: string;
 }
 
 const {
@@ -15,18 +15,18 @@ const {
   title,
   subtitle,
   brand = "Sombade's Tutorials",
-  backHref = '/tutorials',
-  backLabel = 'برگشت به لیست آموزش‌ها',
 } = Astro.props;
 ---
 <header>
-  <img src={bannerSrc} alt={bannerAlt} class="banner" />
+  <img src={bannerSrc} alt={bannerAlt} class="banner" loading="eager" fetchpriority="high" />
   <div class="banner-overlay"></div>
-  <div class="topbar">
-    <h2 class="brand">{brand}</h2>
-    <a href={backHref} class="home-link" aria-label={backLabel}>⌂</a>
-  </div>
+  <TopBar brand={brand} active="/tutorials" />
   <div class="hero-content">
+    <nav class="breadcrumb" aria-label="مسیر">
+      <a href="/">خانه</a> <span class="sep">/</span>
+      <a href="/tutorials">آموزش‌ها</a> <span class="sep">/</span>
+      <span aria-current="page">{title}</span>
+    </nav>
     <h1>{title}</h1>
     <p class="subtitle">{subtitle}</p>
   </div>

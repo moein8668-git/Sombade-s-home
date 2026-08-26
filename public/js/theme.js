@@ -234,6 +234,16 @@
           const wrapper = document.createElement('div');
           wrapper.className = 'code-wrapper';
           pre.parentNode.insertBefore(wrapper, pre);
+
+          const codeEl = pre.querySelector('code');
+          const langMatch = codeEl ? codeEl.className.match(/language-([\w-]+)/) : null;
+          const langLabels = { bash: 'shell', sh: 'shell', shell: 'shell', ini: 'config', json: 'json' };
+          const lang = langMatch ? (langLabels[langMatch[1]] || langMatch[1]) : 'code';
+
+          const head = document.createElement('div');
+          head.className = 'code-head';
+          head.innerHTML = `<span class="code-lang">${lang}</span>`;
+          wrapper.appendChild(head);
           wrapper.appendChild(pre);
 
           const copyBtn = document.createElement('button');
@@ -275,7 +285,7 @@
             }
           });
 
-          wrapper.appendChild(copyBtn);
+          head.appendChild(copyBtn);
         }
       });
     };

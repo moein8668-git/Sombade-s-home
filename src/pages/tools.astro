@@ -1,21 +1,23 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import TopBar from '../components/TopBar.astro';
 ---
 
 <BaseLayout title="جعبه‌ابزار سمباده | ابزارها و اپلیکیشن‌های اوپن‌سورس" description="ابزارها و اپلیکیشن‌های رایگان و اوپن‌سورس." bodyClass="page-tools">
   <header>
-    <img src="/media/images/tools_banner.jpg" alt="Sombade's Toolbox Banner" class="banner">
+    <img src="/media/images/tools_banner.jpg" alt="Sombade's Toolbox Banner" class="banner" loading="eager" fetchpriority="high">
     <div class="banner-overlay"></div>
-    <div class="topbar">
-      <h2 class="brand">Sombade's Toolbox</h2>
-      <a href="/" class="home-link" aria-label="برگشت به خونه سمباده">⌂</a>
-    </div>
+    <TopBar brand="Sombade's Toolbox" active="/tools" />
     <div class="hero-content">
       <h1>جعبه‌ابزار سمباده؛ چیزایی که کارم رو راه می‌اندازن</h1>
       <p class="subtitle">ابزارها و اپلیکیشن‌های رایگان و اوپن‌سورس که خودم ازشون استفاده می‌کنم.</p>
     </div>
+    <div class="hero-index" aria-hidden="true">
+      <b>21</b>
+      <span>TOOLS</span>
+    </div>
   </header>
-  <main class="container">
+  <main id="main" class="container">
     <section class="card">
       <h2><span class="icon">🛠️</span> معرفی</h2>
       <p><span class="highlight">سلام دوباره!</span></p>

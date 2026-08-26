@@ -4,32 +4,97 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const posts = (await getCollection('blog', ({ data }) => !data.draft))
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
   return Promise.all(
-    posts.map(async (post) => ({
+    posts.map(async (post, index) => ({
       params: { slug: post.id },
-      props: { post, content: await render(post) },
+      props: {
+        post,
+        content: await render(post),
+        newer: index > 0 ? posts[index - 1] : null,
+        older: index < posts.length - 1 ? posts[index + 1] : null,
+      },
     })),
   );
 }
 
-const { post, content } = Astro.props;
+const { post, content, newer, older } = Astro.props;
 const { Content } = content;
+
+const site = Astro.site ?? new URL('https://moein8668.ir');
+const postUrl = new URL(`/${post.id}`, site).toString();
+const ogImage = new URL(post.data.banner, site).toString();
+
+const faDate = (date: Date) =>
+  new Intl.DateTimeFormat('fa-IR', { year: 'numeric', month: 'long' }).format(date);
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.pubDate.toISOString(),
+  inLanguage: 'fa-IR',
+  image: ogImage,
+  author: {
+    '@type': 'Person',
+    name: 'معین (سمباده)',
+    url: site.toString(),
+  },
+  mainEntityOfPage: postUrl,
+};
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'خانه', item: site.toString() },
+    { '@type': 'ListItem', position: 2, name: 'آموزش‌ها', item: new URL('/tutorials', site).toString() },
+    { '@type': 'ListItem', position: 3, name: post.data.title, item: postUrl },
+  ],
+};
 ---
-<BaseLayout title={post.data.title} description={post.data.description}>
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  bodyClass="page-tutorials"
+  ogType="article"
+  ogImage={ogImage}
+  publishedTime={post.data.pubDate.toISOString()}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(articleJsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
   <SiteHeader
     bannerSrc={post.data.banner}
     bannerAlt={post.data.bannerAlt}
     title={post.data.title}
     subtitle={post.data.description}
   />
-  <main class="container">
+  <main id="main" class="container">
     <article class="card story tutorial-content">
       <Content />
-      <div class="action-row">
-        <a href="/tutorials" class="action-btn">برگشت به لیست آموزش‌ها</a>
-      </div>
+      <nav class="pn-grid" aria-label="ناوبری آموزش‌ها">
+        {newer && (
+          <a class="pn" href={`/${newer.id}`}>
+            <small>→ آموزش جدیدتر · {faDate(newer.data.pubDate)}</small>
+            <span>{newer.data.title}</span>
+          </a>
+        )}
+        {older && (
+          <a class="pn" href={`/${older.id}`}>
+            <small>← آموزش قبلی · {faDate(older.data.pubDate)}</small>
+            <span>{older.data.title}</span>
+          </a>
+        )}
+        {!older && (
+          <a class="pn pn-back" href="/tutorials">
+            <small>← بازگشت به</small>
+            <span>📚 لیست آموزش‌های سمباده</span>
+          </a>
+        )}
+      </nav>
     </article>
   </main>
 </BaseLayout>
