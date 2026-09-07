@@ -33,4 +33,4 @@ npm run build
 - Production branch: `main`
 - Node version: `22.12.0`
 
-آدرس اصلی سایت: [moein8668.ir](https://moein8668.ir)
+آدرس اصلی سایت: [moein8668.xyz](https://moein8668.xyz)
